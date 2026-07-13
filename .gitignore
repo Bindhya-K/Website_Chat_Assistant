@@ -13,6 +13,7 @@ chroma_db/
 venv/
 .venv/
 env/
+lang-env/
 
 # VS Code
 .vscode/
@@ -22,3 +23,9 @@ env/
 
 # Logs
 *.log
+
+# Pytest
+.pytest_cache/
+
+# Python cache
+*.egg-info/
