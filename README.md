@@ -1,5 +1,5 @@
     '''
-    # Website Chat Assistant
+    # **Website Chat Assistant**
     It is an an AI powered chrome extension that let's you chat with the webpage you're currently viewing.
     Instead of manually searching throughlong articles, documentation or product pages, you can simply ask a 
     question in plain English and get an answer based on the content of that page. The project is built using RAG.
