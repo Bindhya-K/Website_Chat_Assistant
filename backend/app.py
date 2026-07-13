@@ -65,7 +65,8 @@ class QuestionRequest(BaseModel):
 @app.get("/")
 def home():
     return{
-        "message":"Running"
+        "status":"Healthy",
+        "service": "Website Chat Assistant API"
     }
 
 
