@@ -1,4 +1,3 @@
-    '''
     # **Website Chat Assistant**
     It is an an AI powered chrome extension that let's you chat with the webpage you're currently viewing.
     Instead of manually searching throughlong articles, documentation or product pages, you can simply ask a 
@@ -113,9 +112,3 @@
     I'm current learning Data Science and generative AI while building practical projects to strengthen my understanding of ML, LLM and AI applications. 
     If you'd like to connect , feel free to reach out on LinkedIn.
     
-    
-
-
-
-
-'''
