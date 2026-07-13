@@ -1,0 +1,30 @@
+{
+    "manifest_version" : 3,
+    "name": "Website Chat Assistant",
+    "version":"1.0",
+    "description":"Ask questions about anything in any websites using AI",
+    "permissions":[
+        "activeTab",
+        "tabs"
+    ],
+    "icons":{
+        "16":"icons/icons16.png",
+        "32":"icons/icons32.png",
+        "48":"icons/icons48.png",
+        "128":"icons/icons128.png"
+    },
+    "host_permissions":[
+        "http://127.0.0.1:8000/*"
+    ],
+    "action":{
+        "default_popup":"popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "32": "icons/icon32.png"
+        }
+    },
+    "background":{
+        "service_worker":"background.js"
+    }
+
+}
