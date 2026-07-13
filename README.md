@@ -1,4 +1,4 @@
-    '''
+    ```
     # Website Chat Assistant
     It is an an AI powered chrome extension that let's you chat with the webpage you're currently viewing.
     Instead of manually searching throughlong articles, documentation or product pages, you can simply ask a 
@@ -36,13 +36,13 @@
     - Chrome Extension
     ## How it works?
 
-    1. When the extension popsup , it sends  the URL of the active browser tab to FASTAPI backend.
+    1. When the extension opens , it sends  the URL of the active browser tab to FASTAPI backend.
     2. The backend loads the webpage using LangChain's Webbasedloader
     3. The webpage is split into chunks
     4. Each chunk is converted into embedding vectors using all-MiniLM-L6-v2 model
     5. The embedding vectors  are stored in Chroma vector database.
-    6. When a user asks a question, the retriever searches in the vector database and choose the most 4 relevant chunks
-    7. These chunks along with user question is passed as prompt to LLM 
+    6. When a user asks a question, the retriever searches in the vector database and retrieves the most 4 relevant chunks
+    7. These chunks along with user's question are passed as prompt to LLM 
     8. The LLM generates the answer and is displayed in chrome extension to user
 
     ## Project Structure
@@ -106,9 +106,9 @@
 
     ## What I learned
 
-    It helped me gain hands-on experience and strengthened my understanding in how RAG work end-to-end from loading webpages, generating embeddings, promplt engineering, and integrating an LLM into a real application. It also helpmed me understand FastAPI, asynchronous JavaScript, Chrome Extension development, API communication and error handling in production-style applications.
+    It helped me gain hands-on experience and how RAG work end-to-end from loading webpages, generating embeddings, promplt engineering, and integrating an LLM into a real application. It also helped me strengthen my understanding of FastAPI, asynchronous JavaScript, Chrome Extension development, API communication and error handling in production-style applications.
 
-    ## About me
+    ## About the Author
 
     I'm current learning Data Science and generative AI while building practical projects to strengthen my understanding of ML, LLM and AI applications. 
     If you'd like to connect , feel free to reach out on LinkedIn.
