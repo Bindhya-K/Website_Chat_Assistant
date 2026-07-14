@@ -24,6 +24,7 @@ llm =ChatGroq(model = MODEL_NAME)
 vector_store = None
 retriever = None
 page_title = ""
+embeddings = None
 def get_embeddings():
     global embeddings
 
@@ -33,7 +34,7 @@ def get_embeddings():
         )
 
     return embeddings
-embeddings = None
+
 
 prompt = PromptTemplate(
     template="""
