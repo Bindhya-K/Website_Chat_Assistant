@@ -24,10 +24,16 @@ llm =ChatGroq(model = MODEL_NAME)
 vector_store = None
 retriever = None
 page_title = ""
+def get_embeddings():
+    global embeddings
 
-embeddings = HuggingFaceEmbeddings(
-    model_name =EMBEDDING_MODEL
-)
+    if embeddings is None:
+        embeddings = HuggingFaceEmbeddings(
+            model_name=EMBEDDING_MODEL
+        )
+
+    return embeddings
+embeddings = None
 
 prompt = PromptTemplate(
     template="""
@@ -66,7 +72,7 @@ class QuestionRequest(BaseModel):
 def home():
     return{
         "status":"Healthy",
-        "service": "Website Chat Assistant API"
+        "service": "Website Chat Assistant"
     }
 
 
@@ -95,7 +101,7 @@ def index_website(data: WebsiteIndexRequest):
         
         vector_store = Chroma.from_documents(
             documents=chunks,
-            embedding=embeddings
+            embedding=get_embeddings()
         )
         
         retriever = vector_store.as_retriever()
