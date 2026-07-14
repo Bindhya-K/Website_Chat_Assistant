@@ -104,18 +104,22 @@ def index_website(data: WebsiteIndexRequest):
             chunk_overlap=CHUNK_OVERLAP
         )    
         
-        chunks = splitter.split_documents(docs)[:10]
+        chunks = splitter.split_documents(docs)
         print("3. Splitting completed")
         print("chunks",len(chunks))
         print("Before get_embeddings")
         embedding_model = get_embeddings();
         print("After get_embeddings")
         print("Before Chroma")
-        vector_store = Chroma.from_documents(
-            documents=chunks,
-            embedding=embedding_model
+        vector_store = Chroma(
+            embedding_function=embedding_model
         )
         print("After Chroma")
+        batch_size = 20;
+        for i in range(0, len(chunks),batch_size):
+            batch = chunks[i:i+batch_size]
+            vector_store.aadd_documents(batch)
+
         retriever = vector_store.as_retriever()
         
         #return answer
