@@ -82,10 +82,12 @@ def index_website(data: WebsiteIndexRequest):
     global vector_store, retriever, page_title
     # loading website
     try:
+        print("1. Starting Loader")
        
         loader = WebBaseLoader(data.url)
         
         docs = loader.load()
+        print("2.Website loaded")
         #extracting document
         
         document = docs[0]
@@ -99,12 +101,15 @@ def index_website(data: WebsiteIndexRequest):
         )    
         
         chunks = splitter.split_documents(docs)
+        print("3. Splitting completed")
+        print("chunks",len(chunks))
+
         
         vector_store = Chroma.from_documents(
             documents=chunks,
             embedding=get_embeddings()
         )
-        
+        print("4.vector store created")
         retriever = vector_store.as_retriever()
         
         #return answer

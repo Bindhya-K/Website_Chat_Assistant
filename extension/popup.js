@@ -2,7 +2,7 @@ const questionBox = document.getElementById('question')
 const askBtn = document.getElementById('askBtn')
 const answerBox = document.getElementById('answer')
 const EMPTY_QUESTION_MESSAGE = "Please enter a question"
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = "https://endearing-inspiration-production-6e65.up.railway.app";
 
 
 
@@ -19,11 +19,15 @@ async function indexWebsite() {
         active:true,
         currentWindow:true
     })
+    
     const currentTab = tabs[0];
+    console.log(currentTab.url)
     const web = {
         url : currentTab.url
     }
+
     try {
+        console.log("Calling API...");
         const response = await fetch(`${API_URL}/index`,{
             method:"POST",
             headers :{
@@ -31,8 +35,10 @@ async function indexWebsite() {
             },
             body : JSON.stringify(web)
         });
-
+        console.log("Fetch completed");
         const result = await response.json();
+        console.log("INDEX RESPONSE:", result);
+        console.log("STATUS:", response.status);
         const title =
         result.title.length > 35
             ? result.title.substring(0, 35) + "..."
@@ -44,7 +50,8 @@ async function indexWebsite() {
 
         Indexed ${result.chunks} chunks`;
     }
-    catch {
+    catch (error) {
+        console.log("Fetch Error:",error)
         answerBox.innerText = "Server not working";
     }
     finally {
@@ -66,6 +73,7 @@ async function askQuestion() {
     questionBox.disabled = true;
     answerBox.innerText = "Loading ...";
     try {
+        console.log(data)
         const response = await fetch(`${API_URL}/ask`,{
             method : "POST",
             headers : {
@@ -88,6 +96,7 @@ async function askQuestion() {
             
         }
         const result = await response.json();
+        console.log(result);
         answerBox.innerText = result.answer;
         questionBox.value="";
        

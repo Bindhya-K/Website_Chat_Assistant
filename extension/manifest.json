@@ -14,13 +14,13 @@
         "128":"icons/icons128.png"
     },
     "host_permissions":[
-        "http://127.0.0.1:8000/*"
+        "https://endearing-inspiration-production-6e65.up.railway.app/*"
     ],
     "action":{
         "default_popup":"popup.html",
         "default_icon": {
-            "16": "icons/icon16.png",
-            "32": "icons/icon32.png"
+            "16": "icons/icons16.png",
+            "32": "icons/icons32.png"
         }
     },
     "background":{
