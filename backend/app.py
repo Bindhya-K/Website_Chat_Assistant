@@ -13,8 +13,9 @@ load_dotenv()
 
 # constants
 MODEL_NAME = 'llama-3.1-8b-instant'
-EMBEDDING_MODEL='sentence-transformers/all-MiniLM-L6-v2'
-CHUNK_SIZE=1000
+EMBEDDING_MODEL='sentence-transformers/paraphrase-MiniLM-L3-v2'
+
+CHUNK_SIZE=1500
 CHUNK_OVERLAP=200
 
 app=FastAPI()
@@ -29,9 +30,11 @@ def get_embeddings():
     global embeddings
 
     if embeddings is None:
+        print("Embedding model loading started")
         embeddings = HuggingFaceEmbeddings(
             model_name=EMBEDDING_MODEL
         )
+        print("embedding model loaded")
 
     return embeddings
 
@@ -104,10 +107,10 @@ def index_website(data: WebsiteIndexRequest):
         print("3. Splitting completed")
         print("chunks",len(chunks))
 
-        
+        embedding_model = get_embeddings();
         vector_store = Chroma.from_documents(
             documents=chunks,
-            embedding=get_embeddings()
+            embedding=embedding_model
         )
         print("4.vector store created")
         retriever = vector_store.as_retriever()
