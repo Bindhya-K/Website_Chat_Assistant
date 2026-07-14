@@ -30,17 +30,12 @@ def get_embeddings():
     global embeddings
 
     if embeddings is None:
-        print("Before importing embeddings")
-
-        from langchain_huggingface import HuggingFaceEmbeddings
-
-        print("Imported HuggingFaceEmbeddings")
-
+        print("Before creating HFembeddings")
         embeddings = HuggingFaceEmbeddings(
             model_name=EMBEDDING_MODEL
         )
 
-        print("Model created")
+        print("After creating HFEmbeddings")
 
     return embeddings
 
@@ -109,16 +104,18 @@ def index_website(data: WebsiteIndexRequest):
             chunk_overlap=CHUNK_OVERLAP
         )    
         
-        chunks = splitter.split_documents(docs)
+        chunks = splitter.split_documents(docs)[:10]
         print("3. Splitting completed")
         print("chunks",len(chunks))
-
+        print("Before get_embeddings")
         embedding_model = get_embeddings();
+        print("After get_embeddings")
+        print("Before Chroma")
         vector_store = Chroma.from_documents(
             documents=chunks,
             embedding=embedding_model
         )
-        print("4.vector store created")
+        print("After Chroma")
         retriever = vector_store.as_retriever()
         
         #return answer
