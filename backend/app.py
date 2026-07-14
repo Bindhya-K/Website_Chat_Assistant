@@ -30,11 +30,17 @@ def get_embeddings():
     global embeddings
 
     if embeddings is None:
-        print("Embedding model loading started")
-        embeddings = HuggingFaceEmbeddings(
-            model_name=EMBEDDING_MODEL
-        )
-        print("embedding model loaded")
+        try:
+            print("Embedding model loading started")
+            embeddings = HuggingFaceEmbeddings(
+                model_name=EMBEDDING_MODEL
+            )
+            print("embedding model loaded")
+            
+        except Exception as e:
+            print("Embedding loading failed")
+            print(e)
+            raise    
 
     return embeddings
 
