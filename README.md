@@ -61,8 +61,12 @@ Website-Chat-Assistant/
 │   ├── background.js
 │   └── icons/
 │
-├── screenshots/
-│
+├── Screenshots/
+│   ├── error.png
+│   ├── indexed.png
+│   ├── indexing.png
+│   └── Q&A.png
+││
 ├── README.md
 │
 └── .gitignore
@@ -88,7 +92,7 @@ GROQ_API_KEY = your api key here
 ```bash
 uvicorn app:app --reload
 ```
-### 5. Load the crome extension
+### 5. Load the chrome extension
 
 - Open Chrome and navigate to `chrome://extensions`
 - Enable "Developer Mode"
@@ -98,8 +102,17 @@ uvicorn app:app --reload
 The extension is now ready to use
 
 ## Screenshots
-
-
+### Website indexing
+When we first open  the chrome extension , it show "indexing the website"
+![Website Indexing](/Screenshots/indexing.png)
+### Website indexed
+After indexing, title of webpage is diplayed on chrome extension
+![Website Indexed](/Screenshots/indexed.png)
+### Asking Question and Displaying Answer
+![Question & Answer](/Screenshots/Q&A.png)
+### Error Handling
+When Ask button is clicked without entering question in questions bar, an error message is displayed.
+![Error Handling](/Screenshots/error.png)
 ## Future improvements
 Although the extension works well for static webpages content, there are still a few improvements that could be included.
 One limitation of the this project is it only indexes the HTML available when the  page first loads. Many websites render additional content dynamically using JavaScript, so as a fututre improvement, I'd like use Selenium or playwright or similar browser automation tools to capture and index that content as well.
