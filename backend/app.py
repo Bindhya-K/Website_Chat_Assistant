@@ -1,3 +1,5 @@
+import traceback
+
 from fastapi import FastAPI,HTTPException
 from pydantic import BaseModel
 from langchain_community.document_loaders import WebBaseLoader
@@ -8,14 +10,16 @@ from langchain_core.prompts import PromptTemplate
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
+import time
+import traceback
 
 load_dotenv()
 
 # constants
 MODEL_NAME = 'llama-3.1-8b-instant'
-EMBEDDING_MODEL='sentence-transformers/paraphrase-MiniLM-L3-v2'
+EMBEDDING_MODEL='sentence-transformers/all-MiniLM-L6-v2'
 
-CHUNK_SIZE=1500
+CHUNK_SIZE=1000
 CHUNK_OVERLAP=200
 
 app=FastAPI()
@@ -25,20 +29,11 @@ llm =ChatGroq(model = MODEL_NAME)
 vector_store = None
 retriever = None
 page_title = ""
-embeddings = None
-def get_embeddings():
-    global embeddings
 
-    if embeddings is None:
-        print("Before creating HFembeddings")
-        embeddings = HuggingFaceEmbeddings(
-            model_name=EMBEDDING_MODEL
-        )
 
-        print("After creating HFEmbeddings")
-
-    return embeddings
-
+embeddings = HuggingFaceEmbeddings(
+    model_name=EMBEDDING_MODEL
+)
 
 prompt = PromptTemplate(
     template="""
@@ -87,10 +82,12 @@ def index_website(data: WebsiteIndexRequest):
     # loading website
     try:
         print("1. Starting Loader")
-       
+         
         loader = WebBaseLoader(data.url)
-        
+        start = time.time()    
         docs = loader.load()
+        print("Loading time:",time.time() -start)
+
         print("2.Website loaded")
         #extracting document
         
@@ -103,22 +100,18 @@ def index_website(data: WebsiteIndexRequest):
             chunk_size=CHUNK_SIZE,
             chunk_overlap=CHUNK_OVERLAP
         )    
-        
+        start = time.time()
         chunks = splitter.split_documents(docs)
+        print("Splitting time:",time.time()-start)
         print("3. Splitting completed")
-        print("chunks",len(chunks))
-        print("Before get_embeddings")
-        embedding_model = get_embeddings();
-        print("After get_embeddings")
         print("Before Chroma")
-        vector_store = Chroma(
-            embedding_function=embedding_model
+        start=time.time()
+        vector_store = Chroma.from_documents(
+            documents = chunks,
+            embedding=embeddings
         )
         print("After Chroma")
-        batch_size = 20;
-        for i in range(0, len(chunks),batch_size):
-            batch = chunks[i:i+batch_size]
-            vector_store.aadd_documents(batch)
+        print("Embedding+Chroma time:",time.time()-start)
 
         retriever = vector_store.as_retriever()
         
@@ -129,6 +122,8 @@ def index_website(data: WebsiteIndexRequest):
         "chunks": len(chunks)
         }
     except Exception as e:
+
+        traceback.print_exc()
         raise HTTPException(
             status_code=500,
             detail=str(e)
@@ -146,6 +141,13 @@ def ask_question(data:QuestionRequest):
         )
 
     retrieved_docs = retriever.invoke(data.question)
+    print("=" * 60)
+    print("Retrieved Documents")
+    print("=" * 60)
+
+    for i, doc in enumerate(retrieved_docs):
+        print(f"\nDocument {i+1}")
+        print(doc.page_content[:500])
     context = "\n\n".join(doc.page_content for doc in retrieved_docs)
 
     #asking LLM

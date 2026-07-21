@@ -5,7 +5,8 @@
     "description":"Ask questions about anything in any websites using AI",
     "permissions":[
         "activeTab",
-        "tabs"
+        "tabs",
+        "storage"
     ],
     "icons":{
         "16":"icons/icons16.png",
@@ -14,7 +15,7 @@
         "128":"icons/icons128.png"
     },
     "host_permissions":[
-        "https://endearing-inspiration-production-6e65.up.railway.app/*"
+        "http://127.0.0.1:8000/*"
     ],
     "action":{
         "default_popup":"popup.html",

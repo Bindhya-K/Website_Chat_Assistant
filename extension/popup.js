@@ -2,7 +2,7 @@ const questionBox = document.getElementById('question')
 const askBtn = document.getElementById('askBtn')
 const answerBox = document.getElementById('answer')
 const EMPTY_QUESTION_MESSAGE = "Please enter a question"
-const API_URL = "https://endearing-inspiration-production-6e65.up.railway.app";
+const API_URL = "http://127.0.0.1:8000";
 
 
 
@@ -21,11 +21,19 @@ async function indexWebsite() {
     })
     
     const currentTab = tabs[0];
-    console.log(currentTab.url)
+    const currentURL = currentTab.url
     const web = {
-        url : currentTab.url
+        url : currentURL
+    };
+    const data = await chrome.storage.local.get("indexedWebsites");
+    
+    const indexWebsites = data.indexWebsite || {};
+    if (indexWebsite[currentURL]) {
+        answerBox.innerText = `Website already indexed.
+        You can start asking questions. `;
+        askBtn.disabled=false;
+        return;
     }
-
     try {
         console.log("Calling API...");
         const response = await fetch(`${API_URL}/index`,{
@@ -37,8 +45,11 @@ async function indexWebsite() {
         });
         console.log("Fetch completed");
         const result = await response.json();
-        console.log("INDEX RESPONSE:", result);
-        console.log("STATUS:", response.status);
+
+        indexWebsites[currentURL]=true;
+        await chrome.storage.local.set({
+            indexWebsites : indexWebsites
+        });
         const title =
         result.title.length > 35
             ? result.title.substring(0, 35) + "..."
@@ -46,13 +57,14 @@ async function indexWebsite() {
         answerBox.innerText = 
         `Website Indexed
         
-        Title :${result.title}
+        Title :${title}
 
         Indexed ${result.chunks} chunks`;
     }
     catch (error) {
-        console.log("Fetch Error:",error)
-        answerBox.innerText = "Server not working";
+        console.log(error);
+       
+        answerBox.innerText = error.message;
     }
     finally {
         askBtn.disabled = false;
@@ -82,9 +94,9 @@ async function askQuestion() {
             body : JSON.stringify(data)
         }); 
         if(!response.ok) {
-            const error = response.json;
+            const error = await response.json;
             if (response.status===400){
-                answerBox.innerText = error.detail
+                answerBox.innerText = error.detail;
             }
             else if (response.status===500){
                 answerBox.innerText = "Something went wrong. Please try again"
