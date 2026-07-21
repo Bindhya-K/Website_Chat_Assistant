@@ -25,15 +25,7 @@ async function indexWebsite() {
     const web = {
         url : currentURL
     };
-    const data = await chrome.storage.local.get("indexedWebsites");
-    
-    const indexWebsites = data.indexWebsite || {};
-    if (indexWebsite[currentURL]) {
-        answerBox.innerText = `Website already indexed.
-        You can start asking questions. `;
-        askBtn.disabled=false;
-        return;
-    }
+
     try {
         console.log("Calling API...");
         const response = await fetch(`${API_URL}/index`,{
@@ -46,10 +38,6 @@ async function indexWebsite() {
         console.log("Fetch completed");
         const result = await response.json();
 
-        indexWebsites[currentURL]=true;
-        await chrome.storage.local.set({
-            indexWebsites : indexWebsites
-        });
         const title =
         result.title.length > 35
             ? result.title.substring(0, 35) + "..."
